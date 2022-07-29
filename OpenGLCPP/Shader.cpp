@@ -4,16 +4,27 @@
 #include <GLAD/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <GLM/glm.hpp>
+#include <GLM/gtc/matrix_transform.hpp>
+#include <GLM/gtc/type_ptr.hpp>
+#include <GLM/glm.hpp>
+
 #include "Shader.h"
 
 GLuint shaderProgram, vertexShader, fragmentShader;
 
-Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
+GLuint Shader::getShaderProgram() {
+	return shaderProgram;
+}
+
+void Shader::init(const char* vertexShaderPath, const char* fragmentShaderPath) {
 	std::string vertexShaderSourceCode = getShader(vertexShaderPath).c_str();
 	const char* vertexShaderSource = vertexShaderSourceCode.c_str();
+	std::cout << "Found valid GLSL file for GL_VERTEX_SHADER." << std::endl;
 
 	std::string fragmentShaderSourceCode = getShader(fragmentShaderPath).c_str();
 	const char* fragmentShaderSource = fragmentShaderSourceCode.c_str();
+	std::cout << "Found valid GLSL file for GL_FRAGMENT_SHADER." << std::endl;
 
 	vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource, "GL_VERTEX_SHADER");
 	fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource, "GL_FRAGMENT_SHADER");
@@ -28,23 +39,50 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 	glDeleteShader(fragmentShader);
 }
 
-GLuint Shader::getShaderProgram() {
-	return shaderProgram;
+#pragma region ShaderSetValue
+
+void Shader::setValue(const char* name, bool value) {
+	glUniform1i(glGetUniformLocation(shaderProgram, name), (int)value);
 }
 
-void Shader::setValue(const std::string& name, bool value) {
-	glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), (int)value);
+void Shader::setValue(const char* name, int value) {
+	glUniform1i(glGetUniformLocation(shaderProgram, name), value);
 }
 
-void Shader::setValue(const std::string& name, int value) {
-	glUniform1i(glGetUniformLocation(shaderProgram, name.c_str()), value);
+void Shader::setValue(const char* name, float value) {
+	glUniform1f(glGetUniformLocation(shaderProgram, name), value);
 }
 
-void Shader::setValue(const std::string& name, float value) {
-	glUniform1f(glGetUniformLocation(shaderProgram, name.c_str()), value);
+void Shader::setValue(const char* name, const glm::vec2& value) {
+	glUniform2fv(glGetUniformLocation(shaderProgram, name), 1, &value[0]);
 }
 
-std::string Shader::getShader(std::string path) {
+void Shader::setValue(const char* name, const glm::vec3& value) {
+	glUniform3fv(glGetUniformLocation(shaderProgram, name), 1, &value[0]);
+}
+
+void Shader::setValue(const char* name, const glm::vec4& value) {
+	glUniform4fv(glGetUniformLocation(shaderProgram, name), 1, &value[0]);
+}
+
+void Shader::setValue(const char* name, const glm::mat2& value) {
+	glUniformMatrix2fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &value[0][0]);
+}
+
+void Shader::setValue(const char* name, const glm::mat3& value) {
+	glUniformMatrix3fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &value[0][0]);
+}
+void Shader::setValue(const char* name, const glm::mat4& value) {
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, name), 1, GL_FALSE, &value[0][0]);
+}
+
+#pragma endregion
+
+GLuint Shader::getValue(const char* name) {
+	return glGetUniformLocation(shaderProgram, name);
+}
+
+std::string Shader::getShader(const char* path) {
 	std::ifstream file(path);
 	std::stringstream buffer;
 	buffer << file.rdbuf();

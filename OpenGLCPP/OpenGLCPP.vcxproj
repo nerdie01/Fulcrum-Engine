@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\varun\source\repos\OpenGLCPP\Dependencies\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\varun\source\repos\OpenGLCPP\Dependencies\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\varun\source\repos\Fulcrum-Engine\Dependencies\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\varun\source\repos\Fulcrum-Engine\Dependencies\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,14 +132,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="RenderLoop.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Downloads\OpenGL\glad\src\glad.c" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RenderLoop.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
